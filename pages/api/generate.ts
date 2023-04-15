@@ -5,9 +5,7 @@ import Replicate from "replicate";
 // import redis from "../../utils/redis";
 
 
-export const config = {
-  runtime: 'edge',
-}
+
 
 type Data = string;
 
