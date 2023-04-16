@@ -11,6 +11,9 @@ import Image from "next/image";
 import { CompareSlider } from "@/components/CompareSlider";
 import LoadingDots from "@/components/LoadingDots";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const uploader = Uploader({
   apiKey: "free",
 });
@@ -48,7 +51,6 @@ export default function cartoonify() {
   );
 
   async function generateCartoon(fileUrl: string) {
-    await new Promise((resolve) => setTimeout(resolve, 500));
     setLoading(true);
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -59,12 +61,16 @@ export default function cartoonify() {
     });
 
     let newPhoto = await res.json();
+    if (res.status === 504) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      toast("The Model is booting up. Please wait...");
+      setLoading(false);
+    }
     if (res.status !== 200) {
       setError(newPhoto);
     } else {
       setRestoredImage(newPhoto);
     }
-    setLoading(false);
   }
 
   return (
@@ -72,6 +78,7 @@ export default function cartoonify() {
       <Header />
 
       <main className="max-w-6xl mx-auto  pt-6 ">
+        <ToastContainer />
         <h1 className="text-4xl font-bold text-center">Cartoonify any photo</h1>
         <div className="flex justify-center pt-4 ">
           {" "}
