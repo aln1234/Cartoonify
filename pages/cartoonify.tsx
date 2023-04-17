@@ -61,8 +61,8 @@ export default function cartoonify() {
     });
 
     let newPhoto = await res.json();
+    console.log(res);
     if (res.status === 504) {
-      await new Promise((resolve) => setTimeout(resolve, 500));
       toast("The Model is booting up. Please wait...");
       setLoading(false);
     }
@@ -71,6 +71,7 @@ export default function cartoonify() {
     } else {
       setRestoredImage(newPhoto);
     }
+    setLoading(false);
   }
 
   return (
